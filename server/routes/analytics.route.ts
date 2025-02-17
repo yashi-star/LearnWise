@@ -6,7 +6,7 @@ const analyticsRouter = express.Router();
 
 analyticsRouter.get(
     "/get-users-analytics",
-    updateAccessToken,
+    // updateAccessToken,
     isAuthenticated,
     authorizeRoles('admin'),
     getUsersAnalytics
@@ -14,7 +14,7 @@ analyticsRouter.get(
 
 analyticsRouter.get(
     "/get-courses-analytics",
-    updateAccessToken,
+    // updateAccessToken,
     isAuthenticated,
     authorizeRoles('admin'),
     getCoursesAnalytics
@@ -22,7 +22,7 @@ analyticsRouter.get(
 
 analyticsRouter.get(
     "/get-orders-analytics",
-    updateAccessToken,
+    // updateAccessToken,
     isAuthenticated,
     authorizeRoles('admin'),
     getOrdersAnalytics

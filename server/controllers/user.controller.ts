@@ -163,8 +163,10 @@ export const logoutUser = CatchAsyncError(
         try {
             res.cookie('access_token', "", { maxAge: 1 });
             res.cookie('refresh_token', "", { maxAge: 1 });
+
             const userId = req.user?.id || '';
-            console.log(req.body);
+
+            console.log(req.body,"Loggedout");
             redis.del(userId)
             res.status(200).json({
                 success: true,
@@ -231,6 +233,7 @@ export const getUserInfo = CatchAsyncError(
         }
     })
 
+    
 //social auth
 interface ISocialAuthBody {
     email: string;
@@ -348,7 +351,12 @@ export const updateProfilePicture = CatchAsyncError(
                 }
             }
             await user?.save();
+            
+
+
             await redis.set(userId, JSON.stringify(user));
+            console.log('User saved to Redis:', user);
+
             res.status(200).json({
                 success: true,
                 user,
@@ -370,14 +378,45 @@ export const getAllUsers = CatchAsyncError(async (req: Request, res: Response, n
 
 
 //update user role===only for admin
+// export const updateUsersRole = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const { id, role } = req.body;
+//         updateUserRoleService(res, id, role);
+//     } catch (error: any) {
+//         return next(new ErrorHandler(error.message, 400));
+//     }
+// });
 export const updateUsersRole = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
+
+        console.log("User from token:", req.user);  // Log the user object from req.user
+        console.log("Request body:", req.body);    // Log the request body
+        
         const { id, role } = req.body;
-        updateUserRoleService(res, id, role);
+        const userId = req.user?._id;  // Assuming user ID is stored in req.user
+
+        // Check if the user is trying to update their own role or is an admin
+        if (userId !== id ) {
+            return next(new ErrorHandler('You are not authorized to update this user\'s role', 403));
+        }
+
+        // Ensure role is either 'admin' or 'user'
+        if (role !== 'admin' && role !== 'user') {
+            return next(new ErrorHandler('Invalid role provided', 400));
+        }
+
+        // Call service to update user role
+        await updateUserRoleService(res, id, role);
+
+        res.status(200).json({
+            success: true,
+            message: `User role updated to ${role}`,
+        });
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
     }
 });
+
 
 //delete user ===only for admin
 export const deleteUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {

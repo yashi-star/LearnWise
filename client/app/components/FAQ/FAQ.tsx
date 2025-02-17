@@ -6,6 +6,7 @@ import { styles } from '@/app/styles/style';
 import { HiMinus, HiPlus } from 'react-icons/hi';
 
 const FAQ = () => {
+    
     const {data}=useGetHeroDataQuery('FAQ',{});
 
     const [activeQuestion,setActiveQuestion]=useState(null);
