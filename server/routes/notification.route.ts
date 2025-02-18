@@ -6,14 +6,14 @@ import { updateAccessToken } from '../controllers/user.controller';
 const notificationRoute = express.Router();
 notificationRoute.get
     ("/get-all-notifications",
-        updateAccessToken,
+        //updateAccessToken,
         isAuthenticated,
         authorizeRoles("admin"),
         getNotifications);
 
 notificationRoute.put
     ("/update-notification/:id",
-        updateAccessToken,
+    //    updateAccessToken,
         isAuthenticated,
         authorizeRoles("admin"),
         updateNotification);

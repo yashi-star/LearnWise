@@ -31,7 +31,7 @@ courseRouter.get(
 
 courseRouter.get(
     "/get-course-content/:id",
-    updateAccessToken,
+   // updateAccessToken,
     isAuthenticated,
     getCourseByUser,
 );
@@ -69,18 +69,11 @@ courseRouter.put(
 //     getAllCourses,
 // );
 
-courseRouter.get(
-    "/get-admin-courses",
-    updateAccessToken,
-    isAuthenticated,
-    authorizeRoles('admin'),
-    getAdminAllCourses
-);
 
 
 courseRouter.delete(
     "/delete-course/:id",
-    updateAccessToken,
+ //   updateAccessToken,
     isAuthenticated,
     authorizeRoles("admin"),
     deleteCourse,
@@ -90,6 +83,15 @@ courseRouter.delete(
 courseRouter.post(
     "/getVdoCipherOTP",
     generateVideoUrl,
+);
+
+
+courseRouter.get(
+    "/get-admin-courses",
+   // updateAccessToken,
+    isAuthenticated,
+    authorizeRoles('admin'),
+    getAdminAllCourses
 );
 
 export default courseRouter;

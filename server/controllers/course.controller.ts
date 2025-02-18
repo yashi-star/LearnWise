@@ -13,56 +13,145 @@ import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notificationModel";
 
 //upload course
+// export const uploadCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const data = req.body;
+//         const thumbnail = data.thumbnail;
+//         if (thumbnail) {
+//             const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
+//                 folder: "courses"
+//             });
+
+//             data.thumbnail = {
+//                 public_id: myCloud.public_id,
+//                 url: myCloud.secure_url
+//             }
+//         }
+//         createCourse(data, res, next);
+//     } catch (error: any) {
+//         return next(new ErrorHandler(error.message, 500));
+//     }
+// });
+
 export const uploadCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const data = req.body;
-        const thumbnail = data.thumbnail;
+        let thumbnail = data.thumbnail;
+
+        // Check if the thumbnail is an object and contains a URL, then extract the URL
+        if (thumbnail && typeof thumbnail === 'object' && thumbnail.url) {
+            thumbnail = thumbnail.url;  // Get the URL from the object
+        }
+
         if (thumbnail) {
+            // Upload the thumbnail URL to Cloudinary
             const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
                 folder: "courses"
             });
 
+            // Save the Cloudinary response and update the data with public_id and URL
             data.thumbnail = {
                 public_id: myCloud.public_id,
                 url: myCloud.secure_url
-            }
+            };
         }
+
+        // Proceed with creating the course
         createCourse(data, res, next);
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 500));
     }
 });
 
+// //edit course
+// export const editCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const data = req.body;
 
-//edit course
+//         const thumbnail = data.thumbnail;
+
+//         const courseId = req.params.id;
+
+//         const courseData = await CourseModel.findById(courseId) as any;
+
+//         if (thumbnail && !thumbnail.startsWith("https")) {
+//             await cloudinary.v2.uploader.destroy(courseData.thumbnail.public_id);
+//             const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
+//                 folder: "courses"
+//             });
+
+//             data.thumbnail = {
+//                 public_id: myCloud.public_id,
+//                 url: myCloud.secure_url,
+//             };
+//         }
+
+//         if (thumbnail.startsWith("https")) {
+//             data.thumbnail = {
+//                 public_id: courseData?.thumbnail.public_id,
+//                 url: courseData?.thumbnail.url,
+//             };
+//         }
+//         const course = await CourseModel.findByIdAndUpdate(
+//             courseId, {
+//             $set: data,
+//         },
+//             {
+//                 new: true
+//             }
+//         );
+
+//         res.status(201).json({
+//             success: true,
+//             course,
+//         })
+//     } catch (error: any) {
+//         return next(new ErrorHandler(error.message, 500));
+//     }
+// });
+
 export const editCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const data = req.body;
-
-        const thumbnail = data.thumbnail;
+        const thumbnail = data.thumbnail;  // Expecting {url, public_id} object
 
         const courseId = req.params.id;
 
         const courseData = await CourseModel.findById(courseId) as any;
 
-        if (thumbnail && !thumbnail.startsWith("https")) {
-            await cloudinary.v2.uploader.destroy(courseData.thumbnail.public_id);
-            const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
-                folder: "courses"
-            });
+        // Check if thumbnail exists and if it needs to be updated
+        if (thumbnail && thumbnail.url) {  // Check if thumbnail.url is provided
+            // If thumbnail.url starts with 'https', keep it, else upload new image
+            if (!thumbnail.url.startsWith("https")) {
+                // Delete the previous thumbnail from Cloudinary if it exists
+                if (courseData.thumbnail && courseData.thumbnail.public_id) {
+                    await cloudinary.v2.uploader.destroy(courseData.thumbnail.public_id);
+                }
 
-            data.thumbnail = {
-                public_id: myCloud.public_id,
-                url: myCloud.secure_url,
-            };
-        }
+                // Upload new thumbnail to Cloudinary
+                const myCloud = await cloudinary.v2.uploader.upload(thumbnail.url, {
+                    folder: "courses"
+                });
 
-        if (thumbnail.startsWith("https")) {
+                data.thumbnail = {
+                    public_id: myCloud.public_id,
+                    url: myCloud.secure_url,
+                };
+            } else {
+                // If thumbnail is already a URL, use the existing one
+                data.thumbnail = {
+                    public_id: courseData?.thumbnail.public_id,
+                    url: courseData?.thumbnail.url,
+                };
+            }
+        } else {
+            // If no thumbnail is provided, retain the old thumbnail
             data.thumbnail = {
                 public_id: courseData?.thumbnail.public_id,
                 url: courseData?.thumbnail.url,
             };
         }
+
         const course = await CourseModel.findByIdAndUpdate(
             courseId, {
             $set: data,
@@ -75,11 +164,12 @@ export const editCourse = CatchAsyncError(async (req: Request, res: Response, ne
         res.status(201).json({
             success: true,
             course,
-        })
+        });
     } catch (error: any) {
         return next(new ErrorHandler(error.message, 500));
     }
 });
+
 
 //get single course -without purchase
 export const getSingleCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
@@ -135,8 +225,9 @@ export const getCourseByUser = CatchAsyncError(
         try {
             const userCourseList = req.user?.courses;
             const courseId = req.params.id;
-            const courseExists = userCourseList?.find((course: any) =>
-                course._id.toString() === courseId);
+const courseExists = userCourseList?.find((course: any) =>
+    course._id.toString() === courseId.toString()
+);
             if (!courseExists) {
 
                 return next(new ErrorHandler("You are not eligible to access this course", 400));
@@ -151,6 +242,7 @@ export const getCourseByUser = CatchAsyncError(
             return next(new ErrorHandler(error.message, 500));
         }
     });
+
 
 //add queries in course
 interface IAddQuestionData {
@@ -277,6 +369,7 @@ export const addAnswer = CatchAsyncError(async (req: Request, res: Response, nex
     }
 });
 
+
 //add review in course
 interface IAddReviewData {
     review: string;
@@ -314,10 +407,10 @@ export const addReview = CatchAsyncError(async (req: Request, res: Response, nex
         }
 
         await course?.save();
-        await redis.set(courseId, JSON.stringify(course),"EX", 604800);
+        await redis.set(courseId, JSON.stringify(course), "EX", 604800);
         //create notification
         await NotificationModel.create({
-            user:req.user?._id,
+            user: req.user?._id,
             title: "New review recieved",
             message: `${req.user?.name} has given a review in ${course?.name}`,
         })
@@ -362,7 +455,7 @@ export const addReplyToReview = CatchAsyncError(async (req: Request, res: Respon
         review.commentReplies?.push(replyData);
         //save the updted course
         await course?.save();
-        await redis.set(courseId, JSON.stringify(course),"EX",604800);
+        await redis.set(courseId, JSON.stringify(course), "EX", 604800);
         res.status(200).json({
             sucess: true,
             course,
@@ -426,4 +519,3 @@ export const generateVideoUrl = CatchAsyncError(async (req: Request, res: Respon
         return next(new ErrorHandler(error.message, 400));
     }
 });
-
