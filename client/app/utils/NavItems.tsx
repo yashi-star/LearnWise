@@ -13,13 +13,14 @@ export const navItemsData = [
     url: '/courses',
   },
   {
+    name:'Mentorships',
+    url:'/mentor'
+  },
+  {
     name: 'About',
     url: '/about',
   },
-  {
-    name: 'FAQ',
-    url: '/faq',
-  },
+
 ];
 
 type Props = {
@@ -65,7 +66,7 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
                 <span
                   className={`${
                     activeItem === index
-                      ?  'dark:text-[#376fa3] text-[crimson]'
+                      ?  'dark:text-[#376fa3] text-[#c748d0]'
                       : 'dark:text-white text-black'
                   } block py-5 text-[18px] px-6 font-Poppins font-[400]`}
                 >

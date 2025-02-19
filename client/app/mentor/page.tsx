@@ -2,17 +2,17 @@
 import React, { useState } from 'react'
 import Heading from '../utils/Heading'
 import Header from '../components/Header';
-import FAQ from '../components/FAQ/FAQ'
+import Mentorships from '../components/Mentorship/MentorPage'
 import Footer from '../components/Footer';
 
 const Page: React.FC = () => {
     const [open,setOpen]=useState(false);
-    const [activeItem]=useState(4);
+    const [activeItem]=useState(2);
     const [route,setRoute]=useState("Login");
   return (
-    <div className='min-h-screen'>
+    <div>
         <Heading
-        title="LearnWise-FAQ"
+        title="About-LearnWise"
         description='Learnwise is a platform for students and mentors to grow together'
         keywords="Programming,Mern,Projects,Research"
         />
@@ -24,7 +24,7 @@ const Page: React.FC = () => {
         route={route}
         setRoute={setRoute}
         />
-        <FAQ/>
+        <Mentorships/>
         <Footer/>
     </div>
   )

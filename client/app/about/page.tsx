@@ -7,7 +7,7 @@ import Footer from '../components/Footer';
 
 const Page: React.FC = () => {
     const [open,setOpen]=useState(false);
-    const [activeItem]=useState(2);
+    const [activeItem]=useState(3);
     const [route,setRoute]=useState("Login");
   return (
     <div>
