@@ -6,7 +6,7 @@ const courseRouter = express.Router();
 
 courseRouter.post(
     "/create-course",
-    updateAccessToken,
+     updateAccessToken,
     isAuthenticated,
     authorizeRoles("admin"),
     uploadCourse
@@ -31,7 +31,7 @@ courseRouter.get(
 
 courseRouter.get(
     "/get-course-content/:id",
-   // updateAccessToken,
+    updateAccessToken,
     isAuthenticated,
     getCourseByUser,
 );
@@ -73,7 +73,7 @@ courseRouter.put(
 
 courseRouter.delete(
     "/delete-course/:id",
- //   updateAccessToken,
+     updateAccessToken,
     isAuthenticated,
     authorizeRoles("admin"),
     deleteCourse,
@@ -88,7 +88,7 @@ courseRouter.post(
 
 courseRouter.get(
     "/get-admin-courses",
-   // updateAccessToken,
+    updateAccessToken,
     isAuthenticated,
     authorizeRoles('admin'),
     getAdminAllCourses

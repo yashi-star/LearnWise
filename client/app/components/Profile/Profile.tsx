@@ -45,13 +45,26 @@ const Profile: FC<Props> = ({ user }) => {
   }
 
 
-  useEffect(() =>{
-    if(data){
-      const filteredCourses = user.courses.map((userCourse:any) =>
-        data.courses.find((course:any) =>course._id === userCourse._id)).filter((course:any) => course !== undefined);
+  // useEffect(() =>{
+  //   if(data){
+  //     const filteredCourses = user.courses.map((userCourse:any) =>
+  //       data.courses.find((course:any) =>course._id === userCourse._id)).filter((course:any) => course !== undefined);
+  //     setCourses(filteredCourses);
+  //   }
+  // },[data]);
+
+  useEffect(() => {
+    if (data?.courses && user?.courses) {
+      const filteredCourses = user.courses
+        .map((userCourse: any) => 
+          data.courses?.find((course: any) => course._id === userCourse._id)
+        )
+        .filter((course: any) => course !== undefined);
+        
       setCourses(filteredCourses);
     }
-  },[data]);
+  }, [data, user]);
+  
 
   return (
     <div className="w-[85%] flex mx-auto">

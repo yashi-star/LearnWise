@@ -11,9 +11,8 @@ import { SessionProvider } from 'next-auth/react';
 import socketIO from 'socket.io-client';
 import { useEffect } from 'react';
 
-const ENDPOINT=process.env.NEXT_PUBLIC_SOCKET_SERER_URI || "";
+const ENDPOINT=process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || " ";
 const socketId =socketIO(ENDPOINT,{transports: ["websocket"]});
-
 
 
 const poppins = Poppins({

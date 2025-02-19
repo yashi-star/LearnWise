@@ -28,7 +28,7 @@ const FAQ = () => {
           <dl className="space-y-8">
             {questions.map((q) => (
               <div
-                key={q.id}
+                key={q._id}
                 className={`${q._id !== questions[0]?._id && 'border-t'} border-gray-200 pt-6`}
               >
                 <dt className="text-lg">

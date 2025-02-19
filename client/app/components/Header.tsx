@@ -38,10 +38,37 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
       skip: !logout ? true : false,
     });
 
+  // useEffect(() => {
+  //   if(isLoading){
+  //   if (!userData) {
+  //     if (data) {
+  //       socialAuth({
+  //         email: data?.user?.email,
+  //         name: data?.user?.name,
+  //         avatar: data?.user?.image,
+  //       });
+  //       refetch();
+  //     }
+  //   }
+
+  //   if (data === null) {
+  //     if (isSuccess) {
+  //       toast.success('Login Successfully');
+  //     }
+  //   }
+  //   if (data === null  && !isLoading && !userData) {
+  //     setLogout(true);
+  //   }
+  // }
+  // }, [data, userData,isLoading]);
+
+
+
   useEffect(() => {
-    if(isLoading){
-    if (!userData) {
-      if (data) {
+    let isMounted = true; // Flag to track mount status
+  
+    if (isMounted && !isLoading) {
+      if (!userData && data) {
         socialAuth({
           email: data?.user?.email,
           name: data?.user?.name,
@@ -49,30 +76,43 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
         });
         refetch();
       }
-    }
-
-    if (data === null) {
-      if (isSuccess) {
+  
+      if (data === null && isSuccess) {
         toast.success('Login Successfully');
       }
-    }
-    if (data === null  && !isLoading && !userData) {
-      setLogout(true);
-    }
-  }
-  }, [data, userData,isLoading]);
-
-
-  if (typeof window !== 'undefined') {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 85) {
-        setActive(true);
-      } else {
-        setActive(false);
+  
+      if (data === null && !userData) {
+        setLogout(true);
       }
-    });
-  }
+    }
+  
+    return () => {
+      isMounted = false; // Cleanup on unmount
+    };
+  }, [data, userData, isLoading]);
+  
 
+
+
+  // if (typeof window !== 'undefined') {
+  //   window.addEventListener('scroll', () => {
+  //     if (window.scrollY > 85) {
+  //       setActive(true);
+  //     } else {
+  //       setActive(false);
+  //     }
+  //   });
+  // }
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setActive(window.scrollY > 85);
+    };
+  
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  
 
   const handleClose = (e: any) => {
     if (e.target.id === 'screen') {

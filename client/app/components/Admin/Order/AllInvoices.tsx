@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useEffect, useState } from 'react'
@@ -20,30 +21,51 @@ const AllInvoices = ({isDashboard}: Props) => {
     const {isLoading,data}=useGetAllOrdersQuery({});
     const {data:usersData}=useGetAllUsersQuery({});
     const {data:coursesData}=useGetAllCoursesQuery({});
-    const [ setOrderData] = useState<any>([]);
+    const [ orderData,setOrderData] = useState<any>([]);
 
-    useEffect(() =>{
-        if(data){
-            const temp=data.orders.map((item:any) =>{
-                const user=usersData?.users.find(
-                    (user:any) =>user._id===item.userId
-                );
-                const course=coursesData?.courses.find(
-                    (course:any) => course._id === item.courseId
-                );
+    // useEffect(() =>{
+    //     if(data){
+    //         const temp=data.orders.map((item:any) =>{
+    //             const user=usersData?.users.find(
+    //                 (user:any) =>user._id===item.userId
+    //             );
+    //             const course=coursesData?.courses.find(
+    //                 (course:any) => course._id === item.courseId
+    //             );
 
+    //             return {
+    //                 ...item,
+    //                 userName: user?.name,
+    //                 userEmail: user?.email,
+    //                 title: course?.name,
+    //                 price:'5'+ course?.price,
+    //             };
+    //         });
+    //         setOrderData(temp);
+    //     }
+    // },[data,usersData,coursesData]);
+    useEffect(() => {
+        if (data && usersData?.users && coursesData?.courses) {
+            const temp = data.orders.map((item: any) => {
+                const user = usersData.users.find(
+                    (user: any) => user._id === item.userId
+                );
+                const course = coursesData.courses.find(
+                    (course: any) => course._id === item.courseId
+                );
+    
                 return {
                     ...item,
-                    userName: user?.name,
-                    userEmail: user?.email,
-                    title: course?.name,
-                    price:'5'+ course?.price,
+                    userName: user?.name || "Unknown User",
+                    userEmail: user?.email || "No Email",
+                    title: course?.name || "Unknown Course",
+                    price: course?.price ? `$${course.price}` : "N/A",
                 };
             });
             setOrderData(temp);
         }
-    },[data,usersData,coursesData]);
-
+    }, [data, usersData, coursesData]);
+    
 
     const columns:any=[
         {feild:'id',headerName:'ID',flex:0.3},

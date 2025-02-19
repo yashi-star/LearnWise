@@ -109,7 +109,8 @@ const Verification:FC<Props> = ({setRoute}) => {
                     ?"shake border-red-500"
                     : "dark:border-white border-[#0000004a]"
                 }`}
-                placeholder=''
+                title={`Digit ${index + 1}`}
+                placeholder={`Digit ${index + 1}`}
                 maxLength={1}
                 value={verifyNumber[key as keyof VerifyNumber]}
                 onChange={(e) => handleInputChange(index,e.target.value)}
