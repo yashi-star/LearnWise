@@ -497,25 +497,57 @@ export const deleteCourse = CatchAsyncError(async (req: Request, res: Response, 
 
 
 
-//GENERATE VIDEO URL
-export const generateVideoUrl = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+// //GENERATE VIDEO URL
+// export const generateVideoUrl = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const { videoId } = req.body;
+//         const response = await axios.post(
+//             `https://dev.vdocipher.com/api/videos/${videoId}/otp`,
+//             { ttl: 300 },
+//             {
+//                 headers: {
+//                     Accept: 'application/json',
+//                     'Content-Type': 'application/json',
+//                     Authorization: `ApiSecret ${process.env.VDOCIPHER_API_SECRET}`,
+//                 },
+//             }
+
+//         );
+//         res.json(response.data);
+//     } catch (error: any) {
+//         return next(new ErrorHandler(error.message, 400));
+//     }
+// });
+
+export const generateVideoUrl = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { videoId } = req.body;
+
+        console.log("Received request for videoId:", videoId);
+
+        if (!videoId) {
+            console.error("Missing videoId in request");
+            return next(new ErrorHandler("Video ID is required", 400));
+        }
+
+        console.log("Fetching OTP from VdoCipher...");
+
         const response = await axios.post(
             `https://dev.vdocipher.com/api/videos/${videoId}/otp`,
             { ttl: 300 },
             {
                 headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    Authorization: `ApiSecret ${process.env.VDOCIPHER_API_SECRET}`,
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: `Apisecret ${process.env.VDOCIPHER_API_SECRET}`,
                 },
             }
-
         );
 
+        console.log("OTP Response:", response.data);
         res.json(response.data);
     } catch (error: any) {
+        console.error("Error in generateVideoUrl:", error.response?.data || error.message);
         return next(new ErrorHandler(error.message, 400));
     }
-});
+};

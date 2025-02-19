@@ -127,18 +127,21 @@ export const activateUser = CatchAsyncError(async (req: Request, res: Response, 
 interface ILoginRequest {
     email: string;
     password: string;
-
 }
 
 export const loginUser = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         console.log("Request Body:", req.body);
+
         const { email, password } = req.body as ILoginRequest;
+
         if (!email || !password) {
-            return next(new ErrorHandler("Pleaseenter email and password", 400));
+            return next(new ErrorHandler("Please enter email and password", 400));
         }
 
         const user = await userModel.findOne({ email }).select('+password');
+
+        console.log("email:", email, "password:", password);
 
         if (!user) {
             return next(new ErrorHandler("Invalid email or password", 400));
@@ -157,7 +160,6 @@ export const loginUser = CatchAsyncError(async (req: Request, res: Response, nex
 
 
 //logout user
-
 export const logoutUser = CatchAsyncError(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -165,7 +167,6 @@ export const logoutUser = CatchAsyncError(
             res.cookie('refresh_token', "", { maxAge: 1 });
 
             const userId = req.user?.id || '';
-
             console.log(req.body,"Loggedout");
             redis.del(userId)
             res.status(200).json({
