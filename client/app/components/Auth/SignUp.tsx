@@ -151,11 +151,11 @@ const Signup: FC<Props> = ({ setRoute }) => {
 
           <AiFillGithub
             size={30}
-            className="cursor-pointer ml-2"
+            className="cursor-pointer ml-2 dark:text-white text-black"
             onClick={() => signIn('github')}
           />
         </div>
-        <h5 className="text-center pt-4 font-Poppinstext-[14px]">
+        <h5 className="text-center pt-4 font-Poppins text-[14px] dark:text-white text-black">
           Already have an account?{' '}
           <span
             className="text-[#2190ff] pl-1 cursor-pointer"
