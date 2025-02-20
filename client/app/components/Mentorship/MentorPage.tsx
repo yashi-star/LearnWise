@@ -17,10 +17,10 @@ const MentorPage = () => {
             together to build your career!
           </p>
           <div className="flex mt-4">
-            <Link href="/MentorDetailsPage" className={styles.button + ' py-2 text-sm'}>
+            <Link href="/findmentor" className={styles.button + ' py-2 text-sm'} passHref>
               <FaSearch className="mr-2" /> Find Mentor
             </Link>
-            <Link href="/MentorRegister"
+            <Link href="/bementor"
             className={styles.button + ' ml-4 px-4 py-2 text-sm'}>
               Be a mentor</Link>
           </div>
@@ -106,13 +106,12 @@ const MentorPage = () => {
             className="rounded-full w-[50px] h-[50px] ml-[-20px]"
           />   
             <Link
-              href="/MentorDetailsPage"
+              href="/findmentor"
               className="dark:text-[#46e256] text-[crimson] "
+              passHref
             >
               Browse All Mentors
             </Link>{' '}
-
-
           </div>
         </div>
       </div>

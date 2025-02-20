@@ -14,7 +14,7 @@ export const navItemsData = [
   },
   {
     name:'Mentorships',
-    url:'/mentor'
+    url:'/mentorship'
   },
   {
     name: 'About',

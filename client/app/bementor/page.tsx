@@ -2,31 +2,30 @@
 import React, { useState } from 'react'
 import Heading from '../utils/Heading'
 import Header from '../components/Header';
-import Policy from './Policy'
 import Footer from '../components/Footer';
+import BeMentor from '../components/BeMentor/BecomeMentor';
 
 const Page: React.FC = () => {
-    const [open,setOpen]=useState(false);
-    const [activeItem]=useState(3);
-    const [route,setRoute]=useState("Login");
+  const [open, setOpen] = useState<boolean>(false);
+  const [route, setRoute] = useState<string>('');
   return (
-    <div>
+    <>
         <Heading
-        title="Policy-Learnwise"
+        title="About-LearnWise"
         description='Learnwise is a platform for students and mentors to grow together'
         keywords="Programming,Mern,Projects,Research"
         />
-
         <Header
         open={open}
         setOpen={setOpen}
-        activeItem={activeItem}
-        route={route}
+        activeItem={2}
         setRoute={setRoute}
-        />
-        <Policy/>
+        route={route}
+      />
+
+        <BeMentor/>
         <Footer/>
-    </div>
+        </>
   )
 }
 
