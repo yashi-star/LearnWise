@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import {apiSlice} from  "../api/apiSlice";
-import { userLoggedIn, userLoggedOut, userRegistation } from "./authSlice";
+import { userLoggedIn, userLoggedOut, userRegistration } from "./authSlice";
 
 type RegisterationResponse ={
     message:string;
@@ -20,11 +20,11 @@ export const authApi = apiSlice.injectEndpoints({
                 body:data,
                 credentials:"include" as const,
             }),
-            async onQueryStarted(arg,{queryFulfilled,dispatch}){
+            async onQueryStarted(arg, {queryFulfilled,dispatch}){
                 try{
                     const result =await queryFulfilled;
                     dispatch(
-                        userRegistation({
+                        userRegistration({
                             token: result.data.activationToken,
                         })
                     );
@@ -97,23 +97,21 @@ export const authApi = apiSlice.injectEndpoints({
             }
         }),
 
-        logOut:builder.query({
-            query:() =>({
-                url:"logout",
-                method:"GET",
-                credentials:"include" as const,
+        logOut: builder.mutation<void, void>({
+            query: () => ({
+              url: "logout",
+              method: "POST",
+              credentials: "include" as const,
             }),
-            async onQueryStarted(arg,{dispatch}){
-                try{
-                    dispatch(
-                        userLoggedOut()
-                    );
-                }catch(error:any){
-                        console.log(error);
-                }
-            }
-        })
-
+            async onQueryStarted(_, { dispatch }) {
+              try {
+                dispatch(userLoggedOut());
+              } catch (error) {
+                console.error("Logout error:", error);
+              }
+            },
+          })
+          
 
     })
 });
@@ -122,5 +120,6 @@ export const {useRegisterMutation,
     useActivationMutation,
     useLoginMutation,
     useSocialAuthMutation,
-    useLogOutQuery} = authApi;
+    useLogOutMutation,
+} = authApi;
 

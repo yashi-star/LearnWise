@@ -379,14 +379,7 @@ export const getAllUsers = CatchAsyncError(async (req: Request, res: Response, n
 
 
 //update user role===only for admin
-// export const updateUsersRole = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//         const { id, role } = req.body;
-//         updateUserRoleService(res, id, role);
-//     } catch (error: any) {
-//         return next(new ErrorHandler(error.message, 400));
-//     }
-// });
+
 export const updateUsersRole = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
 

@@ -11,7 +11,7 @@ import Image from 'next/image';
 import  Login from '../components/Auth/Login';
 import SignUp  from '../components/Auth/SignUp'
 import Verification from '../components/Auth/Verification'
-import { useLogOutQuery, useSocialAuthMutation } from '@/redux/features/auth/authApi';
+import { useLogOutMutation, useSocialAuthMutation } from '@/redux/features/auth/authApi';
 import toast from 'react-hot-toast';
 import { useLoadUserQuery } from '@/redux/features/api/apiSlice';
 import avatar from  '../../public/images/avatar.png';
@@ -26,7 +26,6 @@ type Props = {
   setRoute: (route: string) => void;
 };
 
-
 const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -34,38 +33,12 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const {data}= useSession();
   const [socialAuth, {isSuccess}] = useSocialAuthMutation();
   const [logout, setLogout] = useState(false);
-    const {} = useLogOutQuery(undefined, {
-      skip: !logout ? true : false,
-    });
 
-  // useEffect(() => {
-  //   if(isLoading){
-  //   if (!userData) {
-  //     if (data) {
-  //       socialAuth({
-  //         email: data?.user?.email,
-  //         name: data?.user?.name,
-  //         avatar: data?.user?.image,
-  //       });
-  //       refetch();
-  //     }
-  //   }
-
-  //   if (data === null) {
-  //     if (isSuccess) {
-  //       toast.success('Login Successfully');
-  //     }
-  //   }
-  //   if (data === null  && !isLoading && !userData) {
-  //     setLogout(true);
-  //   }
-  // }
-  // }, [data, userData,isLoading]);
-
+  const [logOut, { isSuccess: isLoggedOut, error }] = useLogOutMutation();
 
 
   useEffect(() => {
-    let isMounted = true; // Flag to track mount status
+    let isMounted = true; 
   
     if (isMounted && !isLoading) {
       if (!userData && data) {
@@ -91,18 +64,22 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
     };
   }, [data, userData, isLoading]);
   
+  //  Handle Logout properly
+  useEffect(() => {
+    if (logout) {
+      logOut();
+      setLogout(false); 
+    }if (isLoggedOut) {
+      toast.success('Logged out successfully');
+      refetch(); 
+    }
+
+    if (error) {
+      toast.error('Logout failed');
+    }
+  }, [logout, logOut, isLoggedOut, error, refetch]);
 
 
-
-  // if (typeof window !== 'undefined') {
-  //   window.addEventListener('scroll', () => {
-  //     if (window.scrollY > 85) {
-  //       setActive(true);
-  //     } else {
-  //       setActive(false);
-  //     }
-  //   });
-  // }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -115,10 +92,8 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   
 
   const handleClose = (e: any) => {
-    if (e.target.id === 'screen') {
-      {
-        setOpenSidebar(false);
-      }
+    if (e.target.id === 'screen') {   
+        setOpenSidebar(false);  
     }
   };
 

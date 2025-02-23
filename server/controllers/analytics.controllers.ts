@@ -6,6 +6,7 @@ import userModel from "../models/user.model";
 import CourseModel from "../models/course.model";
 import OrderModel from "../models/orderModel";
 
+
 //useranalytics
 export const getUsersAnalytics = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {

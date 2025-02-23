@@ -16,7 +16,6 @@ const stripe=require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 
 //create order
-
 export const createOrder = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { courseId, payment_info } = req.body as IOrder;
