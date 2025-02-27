@@ -261,10 +261,6 @@ export const addAnswer = CatchAsyncError(async (req: Request, res: Response, nex
         };
 
         //add this answer to our course content
-        // // question.questionReplies.push(newAnswer);
-        // if (!question.questionReplies) {
-        //     question.questionReplies = [];
-        // }
         question.questionReplies.push(newAnswer);
 
         //save the updted course

@@ -53,7 +53,6 @@ const CourseContentMedia = ({
   const [reply, setReply] = useState('');
   const [reviewId, setReviewId] = useState('');
 
-  
   const [
     addNewQuestion,
     { isSuccess, error, isLoading: questionCreationLoading },
@@ -320,10 +319,11 @@ const CourseContentMedia = ({
           </div>
           <div className="w-full flex justify-end">
             <div
-              className={`${styles.button} 
-                            !w-[120px] !h-[40px] text-[18px] mt-5 ${
-                              questionCreationLoading && 'cursor-not-allowed'
-                            }`}
+              className={`${
+                styles.button
+              } !w-[120px] !h-[40px] text-[18px] mt-5 ${
+                questionCreationLoading && 'cursor-not-allowed'
+              }`}
               onClick={questionCreationLoading ? () => {} : handleQuestion}
             >
               Submit
@@ -331,7 +331,7 @@ const CourseContentMedia = ({
           </div>
           <br />
           <br />
-          <div className="w-full h-[1px] bg-[#ffffff3b]">
+          <div className="w-full h-[1px] bg-[#ffffff3b] ">
             <div>
               <CommentReply
                 data={data}
@@ -340,7 +340,7 @@ const CourseContentMedia = ({
                 setAnswer={setAnswer}
                 handleAnswerSubmit={handleAnswerSubmit}
                 user={user}
-                setAnswerId={setQuestionId}
+                setQuetionId={setQuestionId}
               />
             </div>
           </div>
@@ -382,7 +382,7 @@ const CourseContentMedia = ({
                           <AiOutlineStar
                             key={i}
                             className="mr-1 cursor-pointer"
-                            color="rgb(264,186,0)"
+                            color="rgb(254,186,0)"
                             size={25}
                             onClick={() => setRating(i)}
                           />
@@ -401,7 +401,8 @@ const CourseContentMedia = ({
                     ></textarea>
                   </div>
                 </div>
-                <div className="w-full flex justiy-end">
+
+                <div className="w-full flex justify-end">
                   <div
                     className={`${
                       styles.button
@@ -418,6 +419,7 @@ const CourseContentMedia = ({
               </>
             )}
             <br />
+
             <div className="w-full h-[1px] bg-[#ffffff3b]"></div>
             <div className="w-full">
               {(course?.reviews && [...course.reviews].reverse()).map(
@@ -449,19 +451,21 @@ const CourseContentMedia = ({
                         </small>
                       </div>
                     </div>
-                    {user.role === 'admin' && item.commentReplies.length ===0 && (
-                      <span
-                        className={`${styles.label} !ml-10 cursor-pointer`}
-                        onClick={() => {
-                          setIsReviewReply(true);
-                          setReviewId(item._id);
-                        }}
-                      >
-                        Add Reply
-                      </span>
-                    )}
 
-                    {isReviewReply && reviewId ===item._id &&(
+                    {user?.role === 'admin' &&
+                      item.commentReplies?.length === 0 && (
+                        <span
+                          className={`${styles.label} !ml-10 cursor-pointer`}
+                          onClick={() => {
+                            setIsReviewReply(true);
+                            setReviewId(item._id);
+                          }}
+                        >
+                          Add Reply
+                        </span>
+                      )}
+
+                    {isReviewReply && reviewId === item._id && (
                       <div className="w-full flex relative">
                         <input
                           type="text"
@@ -480,7 +484,36 @@ const CourseContentMedia = ({
                       </div>
                     )}
 
-                    {item.commentReplies.map((i: any, index: number) => (
+                    {item.commentReplies?.map((i: any, index: number) => (
+                      <div className="w-full flex 800px:ml-16 my-5" key={index}>
+                        <div className="w-[50px] h-[50px]">
+                          <Image
+                            src={
+                              i.user.avatar
+                                ? i.user.avatar.url
+                                : 'https://res.cloudinary.com/dhcc2rwis/image/upload/v1736233498/avatars/iqzkb54hwcpxhkzabemx.jpg'
+                            }
+                            width={50}
+                            height={50}
+                            alt="User Avatar"
+                            className="w-[50px] h-[50px] rounded-full object-cover"
+                          />
+                        </div>
+                        <div className="pl-2">
+                          <div className="flex items-center">
+                            <h5 className="text-[20px]">{i.user.name}</h5>
+                            <VscVerifiedFilled className="text-[#2d4485] ml-2 text-[20px]" />
+                          </div>
+
+                          <p>{i.comment}</p>
+                          <small className="text-[#ffffff83]">
+                            {i.createdAt ? format(i.createdAt) : 'Unknown Date'}
+                          </small>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* {item.commentReplies.map((i: any, index: number) => (
                       <div className="w-full flex 800px:ml-16 my-5" key={index}>
                         <div className="w-[50px] h-[50px]">
                           <Image
@@ -508,7 +541,7 @@ const CourseContentMedia = ({
                           </small>
                         </div>
                       </div>
-                    ))}
+                    ))} */}
                   </div>
                 )
               )}
@@ -531,9 +564,8 @@ const CommentReply = ({
 }: any) => {
   return (
     <>
-      <div className="w-full my-3 ">
-        
-        {/* {data[activeVideo].question.map((item: any, index: any) => (
+      <div className="w-full my-3 dark:text-white text-black">
+        {data[activeVideo].questions.map((item: any, index: any) => (
           <CommentItem
             key={index}
             data={data}
@@ -546,27 +578,7 @@ const CommentReply = ({
             handleAnswerSubmit={handleAnswerSubmit}
             answerCreationLoading={answerCreationLoading}
           />
-        ))} */}
-{data?.[activeVideo]?.question?.length > 0 ? (
-  data[activeVideo].question.map((item: any, index: any) => (
-    <CommentItem
-      key={index}
-      data={data}
-      activeVideo={activeVideo}
-      item={item}
-      index={index}
-      answer={answer}
-      setAnswer={setAnswer}
-      setQuestionId={setQuestionId}
-      handleAnswerSubmit={handleAnswerSubmit}
-      answerCreationLoading={answerCreationLoading}
-    />
-  ))
-) : (
-  <p>No questions available</p>
-)}
-
-
+        ))}
       </div>
     </>
   );
@@ -599,7 +611,7 @@ const CommentItem = ({
               className="w-[50px] h-[50px] rounded-full object-cover"
             />
           </div>
-          <div className="pl-3">
+          <div className="pl-3 dark:text-white text-black">
             <h5 className="text-[12px]">{item?.user.name}</h5>
             <p>{item?.question}</p>
             <small className="text-[#000000bB] dark:text-[#ffffff83]">
@@ -607,6 +619,7 @@ const CommentItem = ({
             </small>
           </div>
         </div>
+
         <div className="w-full flex">
           <span
             className="800px:pl-16 text-[#000000bB] dark:text-[#ffffff83] cursor-pointer mr-2"
@@ -630,7 +643,7 @@ const CommentItem = ({
           </span>
         </div>
 
-        {replyActive &&  questionId ===item._id && (
+        {replyActive && questionId === item._id && (
           <>
             {item.questionReplies.map((reply: any, index: number) => (
               <div
@@ -640,7 +653,7 @@ const CommentItem = ({
                 <div>
                   <Image
                     src={
-                      reply.user.avatar
+                      item.user.avatar
                         ? reply.user.avatar.url
                         : 'https://res.cloudinary.com/dhcc2rwis/image/upload/v1736233498/avatars/iqzkb54hwcpxhkzabemx.jpg'
                     }
@@ -686,6 +699,7 @@ const CommentItem = ({
                   Submit
                 </button>
               </div>
+              <br/>
             </>
           </>
         )}
