@@ -3,11 +3,11 @@ import DashboardHero from '@/app/components/Admin/DashboardHero'
 import AdminProtected from '@/app/hooks/adminProtected'
 import Heading from '../../utils/Heading'
 import AdminSidebar from '@/app/components/Admin/sidebar/AdminSidebar'
-import AllUsers from '@/app/components/Admin/Users/AllUsers'
+import Mentoring from '../../components/Admin/OneOnOneMentor/Mentoring'
 import React from 'react'
 
 
-const page = () => {
+const Page = () => {
   return (
     <div>
         <AdminProtected>
@@ -22,7 +22,7 @@ const page = () => {
             </div>
             <div className='w-[85%]'>
                 <DashboardHero/>
-                <AllUsers isTeam={true}/>
+                <Mentoring/>
             </div>
         </div>
         </AdminProtected>
@@ -30,4 +30,4 @@ const page = () => {
   )
 }
 
-export default page;
+export default Page;

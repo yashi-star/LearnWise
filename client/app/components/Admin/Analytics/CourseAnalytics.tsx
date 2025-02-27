@@ -20,13 +20,13 @@ const CourseAnalytics = () => {
     const {data,isLoading} =useGetCoursesAnalyticsQuery({});
 
     const analyticsData = [
-        { name: 'OCTOBER 2024', uv: 3 },
-        { name: 'OCTOBER 2024', uv: 2 },
-        { name: 'NOVEMBER 2024', uv: 5 },
+        { name: 'AUGUST 2024', uv: 3 },
+        { name: 'SEPTEMBER 2024', uv: 2 },
+        { name: 'OCTOBER 2024', uv: 5 },
         { name: 'NOVEMBER 2024', uv: 7 },
         { name: 'DECEMBER 2024', uv: 2 },
         { name: 'JANUARY 2025', uv: 5 },
-        { name: 'JANUARY 2025', uv: 7 },
+        { name: 'FEBURARY 2025', uv: 7 },
     ];
     
 

@@ -17,7 +17,6 @@ import Loader from '../../Loader/Loader';
 import { useGetOrdersAnalyticsQuery } from '@/redux/features/analytics/analyticsApi';
 import { styles } from '@/app/styles/style';
 
-
 type Props = {
   isDashboard?: boolean;
 };

@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+
 'use client';
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
@@ -78,17 +79,16 @@ const AllCourses = () => {
     },
   ];
 
-  const rows: any = [];
-  data?.courses.forEach((item: any) => {
-    rows.push({
-      id: item._id,
-      title: item.name,
-      purchased: item.purchased,
-      ratings: item.ratings,
-      created_at: format(item.createdAt),
-    });
-  });
+ 
 
+  const rows = data?.courses?.map((item: any) => ({
+    id: item._id,
+    title: item.name,
+    purchased: item.purchased,
+    ratings: item.ratings,
+    created_at: format(item.createdAt),
+  })) || [];
+  
   useEffect(() => {
     if (isSuccess) {
       setOpen(false);

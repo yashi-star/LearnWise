@@ -15,7 +15,6 @@ type Props = {
 }
 
 
-
 const AllInvoices = ({isDashboard}: Props) => {
     const {theme}=useTheme();
     const {isLoading,data}=useGetAllOrdersQuery({});
@@ -68,24 +67,24 @@ const AllInvoices = ({isDashboard}: Props) => {
     
 
     const columns:any=[
-        {feild:'id',headerName:'ID',flex:0.3},
-        {feild:'userName',headerName:'Name',flex: isDashboard? .6 : .5}, 
+        {field:'id',headerName:'ID',flex:0.3},
+        {field:'userName',headerName:'Name',flex: isDashboard? .6 : .5}, 
         ...(isDashboard ?[]
         :[
-            {feild:'useEmail',headerName:'Email',flex:1},
-        {feild:'title',headerName:'Course Title',flex: 1}, 
+            {field:'useEmail',headerName:'Email',flex:1},
+        {field:'title',headerName:'Course Title',flex: 1}, 
         ]),
         {
-            feild:'price', headerName:'Price',flex:0.5},
+            field:'price', headerName:'Price',flex:0.5},
             ...(isDashboard?[
-                {feild:'created_at', headerName:'Created At',flex:0.5},
+                {field:'created_at', headerName:'Created At',flex:0.5},
             ]:
             [
                 {
-                    feild:' ',
+                    field:' ',
                      headerName:'Email',
                      flex:0.2,
-                     rnderCell:(params:any) =>{
+                     renderCell:(params:any) =>{
                         return(
                             <a href={`mailto:${params.row.userEmail}`}>
                                 <AiOutlineMail className='dark:text-white text-black'

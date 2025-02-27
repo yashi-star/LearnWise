@@ -68,7 +68,7 @@ const SideBarProfile: FC<Props> = ({
         </h5>
       </div>
 
-      {user.role === 'admin' && (
+     {/* {user.role === 'admin' && ( */}
         <Link
           href={"/admin"}
           className={`w-full flex items-center px-3 py-4 cursor-pointer ${
@@ -80,7 +80,7 @@ const SideBarProfile: FC<Props> = ({
             Admin Dashboard
           </h5>
         </Link>
-      )}
+      {/* )} */}
 
       <div
         className={`w-full flex items-center px-3 py-4 cursor-pointer ${
