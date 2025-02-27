@@ -4,7 +4,6 @@ import { styles } from '@/app/styles/style';
 import CoursePlayer from '@/app/utils/CoursePlayer';
 import Ratings from '@/app/utils/Ratings';
 import Link from 'next/link';
-import { format } from 'path';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { IoCheckmarkDoneOutline, IoCloseOutline } from 'react-icons/io5';
@@ -14,6 +13,9 @@ import { Elements } from '@stripe/react-stripe-js';
 import CheckOutForm from '../Payment/CheckOutForm';
 import { useLoadUserQuery } from '@/redux/features/api/apiSlice';
 import { VscVerifiedFilled } from 'react-icons/vsc';
+import { format } from 'timeago.js';
+
+
 type Props = {
   data: any;
   clientSecret: string;
@@ -97,7 +99,7 @@ const CourseDetails = ({
               <br />
               <br />
             </div>
-            
+
             <h1 className="text-[25px] font-Poppins font-[600] text-black dark:text-white">
               What are the prerequisites for this course?
             </h1>
@@ -173,8 +175,9 @@ const CourseDetails = ({
                           {item.comment}
                         </p>
                         <small className="text-[#000000d1] dark:text-[#ffffff83]">
-                          {format(item.createdAt)}
-                        </small>
+  {format(new Date(item.createdAt), 'dd MMM yyyy')}
+</small>
+
                       </div>
                       <div className="pl-2 flex 800px:hidden items-center">
                         <h5 className="text-[18px] pr-2 text-black dark:text-white">

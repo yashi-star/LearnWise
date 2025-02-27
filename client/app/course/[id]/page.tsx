@@ -1,12 +1,29 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
+// 'use client'
+// import React from 'react'
+// import CourseDetailsPage from '../../components/Course/CourseDetailsPage';
+
+// const Page = ({params}:any) => {
+//   return (
+//     <CourseDetailsPage id={params.id}/>
+//   )
+// }
+
+// export default Page;
+
 'use client'
 import React from 'react'
-import CourseDetailsPage from '../../components/Course/CourseDetailsPage';
+import CourseDetailsPage from '../../components/Course/CourseDetailsPage'
 
-const Page = ({params}:any) => {
-  return (
-    <CourseDetailsPage id={params.id}/>
-  )
+interface Props {
+  params: {
+    id: string;
+  };
+}
+
+const Page = ({ params }: Props) => {
+  return <CourseDetailsPage id={params.id} />;
 }
 
 export default Page;
+
