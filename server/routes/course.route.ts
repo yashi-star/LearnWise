@@ -6,32 +6,53 @@ const courseRouter = express.Router();
 
 courseRouter.post(
     "/create-course",
-     updateAccessToken,
+    // updateAccessToken,
     isAuthenticated,
     authorizeRoles("admin"),
     uploadCourse
 );
 
+courseRouter.get(
+    "/get-admin-courses",
+    //updateAccessToken,
+    isAuthenticated,
+    authorizeRoles('admin'),
+    getAdminAllCourses
+);
+
+
+
+courseRouter.delete(
+    "/delete-course/:id",
+    // updateAccessToken,
+    isAuthenticated,
+    authorizeRoles("admin"),
+    deleteCourse,
+);
+
 courseRouter.put(
     "/edit-course/:id",
-    updateAccessToken,
+  //  updateAccessToken,
     isAuthenticated,
     authorizeRoles("admin"),
     editCourse
 );
 
 courseRouter.get(
-    "/get-course/:id",
-    getSingleCourse,
-);
-courseRouter.get(
     "/get-courses",
     getAllCourse,
 );
 
+
+courseRouter.get(
+    "/get-course/:id",
+    getSingleCourse,
+);
+
+
 courseRouter.get(
     "/get-course-content/:id",
-    updateAccessToken,
+  //  updateAccessToken,
     isAuthenticated,
     getCourseByUser,
 );
@@ -61,37 +82,9 @@ courseRouter.put(
     addReplyToReview,
 );
 
-// courseRouter.get(
-//     "/get-courses",
-//     updateAccessToken,
-//     isAuthenticated,
-//     authorizeRoles("admin"),
-//     getAllCourses,
-// );
-
-
-
-courseRouter.delete(
-    "/delete-course/:id",
-     updateAccessToken,
-    isAuthenticated,
-    authorizeRoles("admin"),
-    deleteCourse,
-);
-
-
 courseRouter.post(
     "/getVdoCipherOTP",
     generateVideoUrl,
-);
-
-
-courseRouter.get(
-    "/get-admin-courses",
-    updateAccessToken,
-    isAuthenticated,
-    authorizeRoles('admin'),
-    getAdminAllCourses
 );
 
 export default courseRouter;

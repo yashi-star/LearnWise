@@ -28,11 +28,11 @@ const Page = () => {
     if (category === 'All') {
       setCourses(data?.courses);
     }
-    if (category !== 'All') {
-      setCourses(
-        data?.courses.filter((item: any) => item.categories === category)
-      );
-    }
+    // if (category !== 'All') {
+    //   setCourses(
+    //     data?.courses.filter((item: any) => item.categories === category)
+    //   );
+    // }
     if (search) {
       setCourses(
         data?.courses.filter((item: any) =>
