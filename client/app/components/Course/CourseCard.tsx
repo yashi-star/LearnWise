@@ -33,6 +33,7 @@ const CourseCard:FC<Props> = ({item,isProfile}) => {
               <h5 className={`text-black dark:text-[#fff] ${isProfile && 'hidden 800px:inline'
                 }`}>
                   {item.purchased}
+
                   Students
                   </h5>
              </div>
@@ -48,7 +49,7 @@ const CourseCard:FC<Props> = ({item,isProfile}) => {
               <div className='flex items-center pb-3'>
                 <AiOutlineUnorderedList size={20} fill="#fff" />
                 <h5 className='pl-2 text-black dark:text-[#fff]'>
-                  {item.courseData?.length}Lectures
+                  {item.courseData?.length} Lectures
                   </h5>
              </div>
              </div>

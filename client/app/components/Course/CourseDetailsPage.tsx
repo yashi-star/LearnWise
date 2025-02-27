@@ -63,7 +63,6 @@ const CourseDetailsPage = ({ id }: Props) => {
             setOpen={setOpen}
             activeItem={1}
           />
-
           {stripePromise && (
             <CourseDetails
               data={data.course}

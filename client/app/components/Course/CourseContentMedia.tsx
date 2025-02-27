@@ -420,7 +420,7 @@ const CourseContentMedia = ({
             <br />
             <div className="w-full h-[1px] bg-[#ffffff3b]"></div>
             <div className="w-full">
-              {(course?.reviews && [...course.reviews()].reverse()).map(
+              {(course?.reviews && [...course.reviews].reverse()).map(
                 (item: any, index: number) => (
                   <div
                     className="w-full my-5 dark:text-white text-black"
@@ -532,11 +532,12 @@ const CommentReply = ({
   return (
     <>
       <div className="w-full my-3 ">
-        {data[activeVideo].question.map((item: any, index: any) => (
+        
+        {/* {data[activeVideo].question.map((item: any, index: any) => (
           <CommentItem
             key={index}
             data={data}
-            acctiveVideo={activeVideo}
+            activeVideo={activeVideo}
             item={item}
             index={index}
             answer={answer}
@@ -545,7 +546,27 @@ const CommentReply = ({
             handleAnswerSubmit={handleAnswerSubmit}
             answerCreationLoading={answerCreationLoading}
           />
-        ))}
+        ))} */}
+{data?.[activeVideo]?.question?.length > 0 ? (
+  data[activeVideo].question.map((item: any, index: any) => (
+    <CommentItem
+      key={index}
+      data={data}
+      activeVideo={activeVideo}
+      item={item}
+      index={index}
+      answer={answer}
+      setAnswer={setAnswer}
+      setQuestionId={setQuestionId}
+      handleAnswerSubmit={handleAnswerSubmit}
+      answerCreationLoading={answerCreationLoading}
+    />
+  ))
+) : (
+  <p>No questions available</p>
+)}
+
+
       </div>
     </>
   );

@@ -14,9 +14,9 @@ courseRouter.post(
 
 courseRouter.get(
     "/get-admin-courses",
-    //updateAccessToken,
-    isAuthenticated,
-    authorizeRoles('admin'),
+   // updateAccessToken,
+  //isAuthenticated,
+  //authorizeRoles('admin'),
     getAdminAllCourses
 );
 

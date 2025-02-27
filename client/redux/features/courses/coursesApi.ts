@@ -12,11 +12,12 @@ export const courseApi = apiSlice.injectEndpoints({
                 credentials: "include" as const,
             }),
         }),
+
         getAllCourses: builder.query({
             query: () => ({
                 url: "get-admin-courses",
                 method: "GET",
-                credentials: "include" as const,
+             //   credentials: "include" as const,
             })
         }),
         deleteCourse: builder.mutation({
