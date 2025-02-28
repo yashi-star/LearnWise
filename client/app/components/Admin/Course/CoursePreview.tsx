@@ -124,7 +124,6 @@ const CoursePreview: FC<Props> = ({
         <br />
         <br />
 
-        
         {/*couse description */}
         <div className="w-full">
           <h1 className="text-[25px] font-Poppins font-[600]">

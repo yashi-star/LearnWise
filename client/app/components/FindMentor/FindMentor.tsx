@@ -2,8 +2,6 @@
 import SideBar from './SideBar'
 import MentorDetails from "./MentorDetails";
 import Header from "./Header";
-import Footer from "../Footer";
-
 export default function MentorshipPage() {
   return (
     <>

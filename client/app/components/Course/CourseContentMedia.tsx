@@ -206,7 +206,7 @@ const CourseContentMedia = ({
   ]);
 
   return (
-    <div className="w-[95%] 800px:w-[86%] py-4 m-auto">
+    <div className="w-[95%] 800px:w-[86%] py-4 m-auto h-screen">
       <CoursePlayer
         title={data[activeVideo]?.title}
         videoUrl={data[activeVideo]?.videoUrl}
@@ -590,7 +590,7 @@ const CommentItem = ({
   answer,
   setAnswer,
   handleAnswerSubmit,
-  questionId,
+  //questionId,
   answerCreationLoading,
 }: any) => {
   const [replyActive, setreplyActive] = useState(false);
@@ -611,8 +611,9 @@ const CommentItem = ({
               className="w-[50px] h-[50px] rounded-full object-cover"
             />
           </div>
+
           <div className="pl-3 dark:text-white text-black">
-            <h5 className="text-[12px]">{item?.user.name}</h5>
+            <h5 className="text-[20px]">{item?.user.name}</h5>
             <p>{item?.question}</p>
             <small className="text-[#000000bB] dark:text-[#ffffff83]">
               {!item.createdAt ? '' : format(item?.createAt)} .
@@ -643,7 +644,7 @@ const CommentItem = ({
           </span>
         </div>
 
-        {replyActive && questionId === item._id && (
+        {replyActive && (
           <>
             {item.questionReplies.map((reply: any, index: number) => (
               <div
@@ -653,7 +654,7 @@ const CommentItem = ({
                 <div>
                   <Image
                     src={
-                      item.user.avatar
+                      reply.user.avatar
                         ? reply.user.avatar.url
                         : 'https://res.cloudinary.com/dhcc2rwis/image/upload/v1736233498/avatars/iqzkb54hwcpxhkzabemx.jpg'
                     }
@@ -665,7 +666,7 @@ const CommentItem = ({
                 </div>
                 <div className="pl-3">
                   <div className="flex items-center">
-                    <h5 className="text-[20px]">{reply.user.name}</h5>
+                    <h5 className="text-[20px]">{reply.user.name}</h5>{" "}
                     {item.user.role === 'admin' && (
                       <VscVerifiedFilled className="text-[#2d4485] ml-2 text-[20px]" />
                     )}

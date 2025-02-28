@@ -13,7 +13,6 @@ import sendMail from "../utils/sendMail";
 import NotificationModel from "../models/notificationModel";
 
 
-
 //uploadCourse
 export const uploadCourse = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     try {

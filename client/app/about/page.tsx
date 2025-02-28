@@ -1,33 +1,33 @@
-'use client'
-import React, { useState } from 'react'
-import Heading from '../utils/Heading'
+'use client';
+import React, { useState } from 'react';
+import Heading from '../utils/Heading';
 import Header from '../components/Header';
-import About from './About'
+import About from './About';
 import Footer from '../components/Footer';
 
 const Page: React.FC = () => {
-    const [open,setOpen]=useState(false);
-    const [activeItem]=useState(3);
-    const [route,setRoute]=useState("Login");
+  const [open, setOpen] = useState(false);
+  const [activeItem] = useState(3);
+  const [route, setRoute] = useState('Login');
   return (
     <div>
-        <Heading
+      <Heading
         title="About-LearnWise"
-        description='Learnwise is a platform for students and mentors to grow together'
+        description="Learnwise is a platform for students and mentors to grow together"
         keywords="Programming,Mern,Projects,Research"
-        />
+      />
 
-        <Header
+      <Header
         open={open}
         setOpen={setOpen}
         activeItem={activeItem}
         route={route}
         setRoute={setRoute}
-        />
-        <About/>
-        <Footer/>
+      />
+      <About />
+      <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
