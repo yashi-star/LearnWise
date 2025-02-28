@@ -5,29 +5,29 @@ import { ChevronDown, Filter, Star, Zap, Tag } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="w-full p-4 shadow-md mb-4 flex items-center justify-between">
+    <header className="w-full p-4 shadow-md mb-4 flex items-center justify-between ">
      
       {/* Filters & Actions */}
       <div className="flex items-center space-x-3">
         {/* Dropdown Button */}
-        <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-full">
+        <button className="flex items-center px-4 py-2 bg-blue-600 dark:text-white text-black rounded-full">
           Mentorship <ChevronDown className="ml-2 w-4 h-4" />
         </button>
 
         {/* Sort & Filters */}
-        <button className="flex items-center px-3 py-2 border rounded-full text-gray-700">
+        <button className="flex items-center px-3 py-2 border rounded-full dark:text-white text-black">
           Sort By <ChevronDown className="ml-2 w-4 h-4" />
         </button>
 
-        <button className="flex items-center px-3 py-2 border rounded-full text-gray-700">
+        <button className="flex items-center px-3 py-2 border rounded-full dark:text-white text-black">
           <Filter className="w-4 h-4 mr-2" /> Filters
         </button>
 
-        <button className="flex items-center px-3 py-2 border rounded-full text-gray-700">
+        <button className="flex items-center px-3 py-2 border rounded-full dark:text-white text-black">
           Skills <ChevronDown className="ml-2 w-4 h-4" />
         </button>
 
-        <button className="flex items-center px-3 py-2 border rounded-full text-gray-700">
+        <button className="flex items-center px-3 py-2 border rounded-full  dark:text-white text-black">
           <Zap className="w-4 h-4 mr-2 text-blue-500" /> Availability
         </button>
 
@@ -35,7 +35,7 @@ export default function Header() {
           <Star className="w-4 h-4 mr-2" /> Top Mentors
         </button>
 
-        <button className="flex items-center px-3 py-2 border rounded-full text-gray-700">
+        <button className="flex items-center px-3 py-2 border rounded-full dark:text-white text-black">
           <Tag className="w-4 h-4 mr-2" /> Free Services
         </button>
 
