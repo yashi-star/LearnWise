@@ -5,8 +5,13 @@ import {
   Calendar,
   PhoneCall,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function MentorProfile() {
+  const router = useRouter();
+  const handleBookNow = (mentorId: string) => {
+    router.push(`/findmentor/bookmentor/${mentorId}`);
+  };
   return (
     <div className="max-w-4xl mx-auto p-6  rounded-xl shadow-lg mt-10">
       {/* Mentor Header */}
@@ -65,9 +70,15 @@ export default function MentorProfile() {
               </p>
             </div>
           </div>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">
-            Book Now
-          </button>
+          <div>
+      {/* Other mentor details here */}
+      <button
+        onClick={() => handleBookNow('3432')} // Replace with dynamic mentor ID
+        className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+      >
+        Book Now
+      </button>
+    </div>
         </div>
       </div>
 
