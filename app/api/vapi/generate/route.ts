@@ -1,7 +1,10 @@
-import { generateText } from "ai";
-import { google } from "@ai-sdk/google";
-import { courses } from "../../../../lib/data";
+import { findMatchingCourses } from "../../../../lib/courseMapping";
 import { cookies } from "next/headers";
+import { courses } from "../../../../lib/data";
+
+// Comment out the Gemini imports since we're not using them anymore
+// import { generateText } from "ai";
+// import { google } from "@ai-sdk/google";
 
 // Define a type for course data
 interface CourseData {
@@ -15,8 +18,16 @@ interface CourseData {
 export async function POST(request: Request) {
   const { courseDescription, mentorDescription, professionalStatus } =
     await request.json();
+  console.log(
+    courseDescription,
+    mentorDescription,
+    professionalStatus,
+    "courseDescription, mentorDescription, professionalStatus"
+  );
 
   try {
+    // Comment out Gemini API code and use our keyword matching instead
+    /*
     // Convert courses to a format that works well in the prompt
     const coursesData = courses.map(course => ({
       id: course.id,
@@ -26,50 +37,60 @@ export async function POST(request: Request) {
       level: (course as any).level || "Beginner",
     }));
 
+    // Check for API key
+    const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      throw new Error("Google Generative AI API key is missing. Set GOOGLE_GENERATIVE_AI_API_KEY or GEMINI_API_KEY in your environment variables.");
+    }
+
     // Create a structured prompt for the Gemini model
     const { text: courseId } = await generateText({
-      model: google("gemini-2.0-flash-001"),
-      prompt: `Based on the user's input, recommend the most appropriate course ID from our available courses.
-
-User's Information:
-- Looking to learn: ${courseDescription}
-- Mentor preferences: ${mentorDescription || "No specific preferences"}
-- Professional status: ${professionalStatus || "Not specified"}
-
-Available Courses:
-${JSON.stringify(coursesData, null, 2)}
-
-Analyze the user's needs and match them with the most suitable course from our catalog.
-Consider their learning goals, professional status, and any mentor preferences they shared.
-
-IMPORTANT: Return ONLY the course ID as a string. Do not include any additional text, explanation, or formatting.
-For example, just return: "course-123"
-
-If no suitable course is found, return "no-match"
-`,
+      model: google("gemini-2.0-flash-001", { apiKey }),
+      prompt: `Based on the user's input...`,
     });
+    */
 
-    // Return the course ID (or no-match)
-    const trimmedCourseId = courseId.trim();
+    // New implementation using keyword matching
+    let searchQuery = courseDescription || "";
 
-    // Set the cookie in the response using the correct API
+    // // Optionally include other factors in the search
+    // if (mentorDescription) {
+    //   searchQuery += " " + mentorDescription;
+    // }
+
+    // if (professionalStatus) {
+    //   searchQuery += " " + professionalStatus;
+    // }
+
+    // Find matching courses based on the combined search query
+    const matchingCourseIds = findMatchingCourses(searchQuery);
+
+    // Get the best match or default to "no-match"
+    const courseIdStr =
+      matchingCourseIds.length > 0
+        ? matchingCourseIds[0].toString()
+        : "no-match";
+
+    console.log("Course ID:", courseIdStr);
+
+    // Set the cookie in the response
     const cookieStore = await cookies();
-    cookieStore.set("recommendedCourseId", trimmedCourseId, {
+    cookieStore.set("recommendedCourseId", courseIdStr, {
       path: "/",
       maxAge: 86400, // 24 hours in seconds
-      secure: process.env.NODE_ENV === "production",
+      // secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     });
 
     return Response.json(
       {
         success: true,
-        courseId: trimmedCourseId,
+        courseId: courseIdStr,
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error generating course recommendation:", error);
+    console.error("Error finding course recommendation:", error);
     return Response.json(
       {
         success: false,
@@ -84,5 +105,25 @@ If no suitable course is found, return "no-match"
 }
 
 export async function GET() {
-  return Response.json({ success: true, data: "Thank you!" }, { status: 200 });
+  try {
+    const cookieStore = await cookies();
+    const recommendedCourseId = cookieStore.get("recommendedCourseId");
+
+    return Response.json(
+      {
+        success: true,
+        data: { recommendedCourseId },
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error retrieving cookie:", error);
+    return Response.json(
+      {
+        success: false,
+        error: "Failed to retrieve recommendation",
+      },
+      { status: 500 }
+    );
+  }
 }

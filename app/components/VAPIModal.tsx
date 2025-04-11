@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation";
 import { X, Mic } from "lucide-react";
 import { vapi } from "@/lib/vapi.sdk";
 import { cn } from "@/lib/utils";
-import { useRecommendationStore } from "@/lib/store/recommendationStore";
+// import { useRecommendationStore } from "@/lib/store/recommendationStore";
+// import { cookies } from "next/headers";
+import { getRecommendedCourseId } from "../server-actions/getRecommendedCourseId";
 
 interface VAPIModalProps {
   isOpen: boolean;
@@ -41,7 +43,7 @@ const VAPIModal = ({ isOpen, onClose }: VAPIModalProps) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const transcriptRef = useRef<HTMLDivElement>(null);
   const [processingStatus, setProcessingStatus] = useState("");
-  const { setRecommendedCourseId } = useRecommendationStore();
+  //   const { setRecommendedCourseId } = useRecommendationStore();
 
   // Use a ref to store conversation data to avoid dependency cycles
   const conversationDataRef = useRef<ConversationData>({});
@@ -112,56 +114,57 @@ const VAPIModal = ({ isOpen, onClose }: VAPIModalProps) => {
     };
 
     const onCallEnd = async () => {
-      try {
-        setCallStatus(CallStatus.PROCESSING);
-        setProcessingStatus("Finding the perfect course for you...");
+      setCallStatus(CallStatus.PROCESSING);
+      setProcessingStatus("Finding the perfect course for you...");
 
-        // If no course description was extracted, use a default
-        if (!conversationDataRef.current.courseDescription) {
-          conversationDataRef.current.courseDescription =
-            "programming or technology skills";
+      // If no course description was extracted, use a default
+      // if (!conversationDataRef.current.courseDescription) {
+      //   conversationDataRef.current.courseDescription =
+      //     "programming or technology skills";
+      // }
+
+      // Instead of making API call, we check the store
+      // We just log the conversation data for debugging purposes
+      //   console.log("Conversation data:", conversationDataRef.current);
+
+      // Check if we already have a recommended course ID in the store
+      // This would be set externally by the API you mentioned
+      // const cookieStore = await cookies();
+      const res = await fetch("/api/vapi/generate", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      console.log(data, "API response data");
+
+      // Extract the course ID correctly from the response
+      const courseId = data.data?.value || null;
+      console.log(courseId, "extracted courseId");
+
+      setProcessingStatus(
+        courseId ? "Found a perfect match!" : "Processing your request..."
+      );
+      setCallStatus(CallStatus.FINISHED);
+      if (courseId) {
+        if (courseId === "no-match") {
+          router.push("/no-match");
+        } else {
+          router.push(`/dashboard/courses/${courseId}`);
         }
-
-        // Instead of making API call, we check the store
-        // We just log the conversation data for debugging purposes
-        console.log("Conversation data:", conversationDataRef.current);
-
-        // Check if we already have a recommended course ID in the store
-        // This would be set externally by the API you mentioned
-        const recommendedId =
-          useRecommendationStore.getState().recommendedCourseId;
-
-        setProcessingStatus(
-          recommendedId
-            ? "Found a perfect match!"
-            : "Processing your request..."
-        );
-        setCallStatus(CallStatus.FINISHED);
-
-        // Redirect based on what's in the store
-        setTimeout(() => {
-          onClose();
-          if (recommendedId) {
-            if (recommendedId === "no-match") {
-              router.push("/no-match");
-            } else {
-              router.push(`/dashboard/courses/${recommendedId}`);
-            }
-          } else {
-            // If no recommendation in store, go to dashboard
-            router.push("/dashboard");
-          }
-        }, 2000);
-      } catch (error) {
-        console.error("Error processing end of call:", error);
-        setCallStatus(CallStatus.FINISHED);
-
-        // Fallback to dashboard
-        setTimeout(() => {
-          onClose();
-          router.push("/dashboard");
-        }, 2000);
+      } else {
+        router.push("/no-match");
       }
+      // Redirect based on what's in the store
+      //   setTimeout(() => {
+      //     onClose();
+
+      //     } else {
+      //       // If no recommendation in store, go to dashboard
+      //       router.push("/dashboard");
+      //     }
+      //   }, 1000);
     };
 
     const onMessage = (message: Message) => {
@@ -177,17 +180,17 @@ const VAPIModal = ({ isOpen, onClose }: VAPIModalProps) => {
     const onSpeechStart = () => setIsSpeaking(true);
     const onSpeechEnd = () => setIsSpeaking(false);
 
-    const onError = (error: Error) => {
-      console.error("VAPI Error:", error);
-      setCallStatus(CallStatus.INACTIVE);
-    };
+    // const onError = (error: Error) => {
+    //   console.error("VAPI Error:", error);
+    //   setCallStatus(CallStatus.INACTIVE);
+    // };
 
     vapi.on("call-start", onCallStart);
     vapi.on("call-end", onCallEnd);
     vapi.on("message", onMessage);
     vapi.on("speech-start", onSpeechStart);
     vapi.on("speech-end", onSpeechEnd);
-    vapi.on("error", onError);
+    // vapi.on("error", onError);
 
     return () => {
       vapi.off("call-start", onCallStart);
@@ -195,9 +198,9 @@ const VAPIModal = ({ isOpen, onClose }: VAPIModalProps) => {
       vapi.off("message", onMessage);
       vapi.off("speech-start", onSpeechStart);
       vapi.off("speech-end", onSpeechEnd);
-      vapi.off("error", onError);
+      //   vapi.off("error", onError);
     };
-  }, [isOpen, onClose, router, setRecommendedCourseId]);
+  }, [isOpen, onClose, router]);
 
   // Reset state when modal opens/closes
   useEffect(() => {
