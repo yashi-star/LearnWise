@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - LearnWise</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+        .step-indicator.active {
+            background-color: #4F46E5;
+            border-color: #4F46E5;
+            color: white;
+        }
+        .step-indicator.completed {
+            background-color: #4F46E5;
+            border-color: #4F46E5;
+            color: white;
+        }
+        .step-indicator.pending {
+            background-color: white;
+            border-color: #D1D5DB;
+            color: #6B7280;
+        }
+        .step-connector {
+            height: 2px;
+            background-color: #D1D5DB;
+            flex-grow: 1;
+            margin: 0 1rem;
+        }
+        .step-connector.active {
+            background-color: #4F46E5;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+            <!-- Progress Steps -->
+            <div class="p-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="step-indicator completed rounded-full h-10 w-10 flex items-center justify-center border-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <div class="step-connector active"></div>
+                        <div class="step-indicator active rounded-full h-10 w-10 flex items-center justify-center border-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-2">
+                    <span class="text-sm font-medium text-indigo-600">Account Details</span>
+                    <span class="text-sm font-medium text-indigo-600">Face Verification</span>
+                </div>
+            </div>
+
+            <!-- Step 1: Account Details -->
+            <div id="step1Form" class="p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Create your account</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <input type="text" id="name" name="name" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            placeholder="Enter your full name">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                        <input type="email" id="email" name="email" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            placeholder="Enter your email">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" id="password" name="password" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            placeholder="Create a password">
+                    </div>
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            placeholder="Confirm your password">
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <button type="button" onclick="validateStep1()"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Next: Face Verification
+                    </button>
+                </div>
+                <div class="mt-4 text-center">
+                    <a href="/login" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                        Already have an account? Sign in
+                    </a>
+                </div>
+            </div>
+
+            <!-- Step 2: Face Verification -->
+            <div id="step2Form" class="p-6 hidden">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Face Verification</h2>
+                <p class="text-sm text-gray-600 mb-6">Please ensure your face is well-lit and clearly visible in the frame</p>
+                
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                    <div id="cameraContainer" class="relative">
+                        <video id="video" class="w-full rounded-lg mb-4" autoplay playsinline muted style="display: none;"></video>
+                        <canvas id="canvas" class="hidden"></canvas>
+                        <div id="photoPreview" class="hidden">
+                            <img id="preview" class="w-full rounded-lg mb-4" alt="Preview">
+                            <div class="flex space-x-4">
+                                <button type="button" onclick="retakePhoto()"
+                                    class="flex-1 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    Retake Photo
+                                </button>
+                                <button type="button" onclick="verifyPhoto()"
+                                    class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Verify Photo
+                                </button>
+                            </div>
+                        </div>
+                        <div id="cameraControls" class="flex space-x-4">
+                            <button type="button" onclick="startCamera()" id="startCameraBtn"
+                                class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Start Camera
+                            </button>
+                            <button type="button" onclick="capturePhoto()" id="captureBtn"
+                                class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hidden">
+                                Take Photo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex space-x-4">
+                    <button type="button" onclick="goBackToStep1()"
+                        class="flex-1 bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                        Back
+                    </button>
+                    <button type="button" onclick="submitForm()" id="submitBtn" disabled
+                        class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 opacity-50 cursor-not-allowed">
+                        Complete Registration
+                    </button>
+                </div>
+            </div>
+
+            <div id="error" class="p-4 text-red-500 text-sm text-center hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        let stream = null;
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const preview = document.getElementById('preview');
+        const photoPreview = document.getElementById('photoPreview');
+        const cameraControls = document.getElementById('cameraControls');
+        const startCameraBtn = document.getElementById('startCameraBtn');
+        const captureBtn = document.getElementById('captureBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const step1Form = document.getElementById('step1Form');
+        const step2Form = document.getElementById('step2Form');
+        let photoData = null;
+        let isPhotoVerified = false;
+
+        function validateStep1() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorDiv = document.getElementById('error');
+
+            // Reset error
+            errorDiv.classList.add('hidden');
+
+            // Validate inputs
+            if (!name || !email || !password || !confirmPassword) {
+                showError('All fields are required');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showError('Passwords do not match');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('Password must be at least 6 characters long');
+                return;
+            }
+
+            // Move to step 2
+            step1Form.classList.add('hidden');
+            step2Form.classList.remove('hidden');
+        }
+
+        function goBackToStep1() {
+            step2Form.classList.add('hidden');
+            step1Form.classList.remove('hidden');
+            stopCamera();
+        }
+
+        async function startCamera() {
+            try {
+                if (stream) stream.getTracks().forEach(track => track.stop());
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        // width: 640, 
+                        // height: 480,
+                        // facingMode: 'user'
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user',
+                        frameRate: { ideal: 30 }
+                    } 
+                });
+                video.srcObject = stream;
+                video.style.display = 'block';
+                startCameraBtn.classList.add('hidden');
+                captureBtn.classList.remove('hidden');
+                await new Promise((resolve) => {
+                    video.onloadedmetadata = () => {
+                        video.play();
+                        resolve();
+                    };
+                });
+            } catch (err) {
+                showError('Error accessing camera. Please make sure you have granted camera permissions.');
+                console.error('Camera error:', err);
+            }
+        }
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                video.style.display = 'none';
+                startCameraBtn.classList.remove('hidden');
+                captureBtn.classList.add('hidden');
+                stream = null;
+            }
+        }
+
+        function capturePhoto() {
+            if (video && canvas) {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                // canvas.getContext('2d').drawImage(video, 0, 0);
+                photoData = canvas.toDataURL('image/jpeg', 0.8);
+                // Draw the current video frame
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // Convert to JPEG with quality 0.8
+                photoData = canvas.toDataURL('image/jpeg', 0.8);
+                
+                // Show preview
+                preview.src = photoData;
+                photoPreview.classList.remove('hidden');
+                cameraControls.classList.add('hidden');
+                stopCamera();
+
+                // Auto-verify the photo
+                verifyPhoto();
+            }
+        }
+
+        function retakePhoto() {
+            photoData = null;
+            isPhotoVerified = false;
+            photoPreview.classList.add('hidden');
+            cameraControls.classList.remove('hidden');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            startCamera();
+        }
+
+        async function verifyPhoto() {
+            try {
+                const response = await fetch('/verify-photo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ photo: photoData }),
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Photo verification failed');
+                }
+
+                if (data.verified) {
+                    isPhotoVerified = true;
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    showError('Photo verified successfully!', 'success');
+                } else {
+                    throw new Error(data.message || 'Face not properly visible. Please ensure good lighting and no shadows.');
+                }
+            } catch (error) {
+                showError(error.message);
+                setTimeout(retakePhoto, 2000);
+            }
+        }
+
+        async function submitForm() {
+            if (!isPhotoVerified) {
+                showError('Please verify your photo first');
+                return;
+            }
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password, photo: photoData }),
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Signup failed');
+                }
+                
+                // Redirect to dashboard on success
+                window.location.href = '/dashboard';
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        function showError(message, type = 'error') {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+            if (type === 'success') {
+                errorDiv.classList.remove('text-red-500');
+                errorDiv.classList.add('text-green-500');
+            } else {
+                errorDiv.classList.remove('text-green-500');
+                errorDiv.classList.add('text-red-500');
+            }
+            console.error(message);
+        }
+    </script>
+</body>
+</html>
